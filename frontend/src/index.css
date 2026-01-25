@@ -8,27 +8,32 @@
 
 @layer base {
   :root {
-    /* Dashboard Design System */
-    --background: 210 40% 98%;
-    --foreground: 220 15% 20%;
+    /* Humétrica Design System */
+    --background: 0 0% 100%;
+    --foreground: 210 40% 6%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 15% 20%;
+    --card-foreground: 210 40% 6%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 20%;
+    --popover-foreground: 210 40% 6%;
 
-    --primary: 160 100% 40%;
+    --primary: 162 62% 34%;        /* #218E73 - Verde principal */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 20% 96%;
-    --secondary-foreground: 220 15% 20%;
+    --secondary-foreground: 210 40% 6%;
 
     --muted: 210 20% 96%;
     --muted-foreground: 220 10% 50%;
 
-    --accent: 160 100% 40%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 160 100% 40%;        /* #00CD99 - Verde brillante */
+    --accent-foreground: 210 40% 6%;
+
+    --navy: 210 64% 7%;            /* #051320 - Azul oscuro */
+    --navy-light: 210 50% 15%;
+
+    --highlight: 47 100% 50%;      /* Amarillo acento */
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -326,6 +331,10 @@
     animation: slideInRight 0.4s ease-out forwards;
   }
 
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -357,6 +366,50 @@
     }
   }
 
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Utilidades de delay de animación */
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+
+  .animation-delay-700 {
+    animation-delay: 700ms;
+  }
+
+  .animation-delay-800 {
+    animation-delay: 800ms;
+  }
+
   @keyframes shake {
     0%, 100% {
       transform: translateX(0);
@@ -382,5 +435,64 @@
       transform: translateY(-40px) scale(0.9);
       opacity: 0;
     }
+  }
+
+  @keyframes blink {
+    0%, 50% {
+      opacity: 1;
+    }
+    51%, 100% {
+      opacity: 0;
+    }
+  }
+
+  /* Utilidades de texto con colores personalizados */
+  .text-navy {
+    color: hsl(var(--navy));
+  }
+
+  .text-primary {
+    color: hsl(var(--primary));
+  }
+
+  .text-accent {
+    color: hsl(var(--accent));
+  }
+
+  /* Utilidades de fondo con colores personalizados */
+  .bg-primary {
+    background-color: hsl(var(--primary));
+  }
+
+  .bg-navy {
+    background-color: hsl(var(--navy));
+  }
+
+  .bg-navy-light {
+    background-color: hsl(var(--navy-light));
+  }
+
+  /* Gradientes */
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-hero-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--accent) / 0.05));
+  }
+
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+  }
+
+  .bg-gradient-navy {
+    background: linear-gradient(135deg, hsl(var(--navy)), hsl(var(--navy-light)));
+  }
+
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
   }
 }

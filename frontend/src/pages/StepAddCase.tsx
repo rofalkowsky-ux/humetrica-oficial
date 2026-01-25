@@ -28,7 +28,7 @@ export const StepAddCase = ({ onNext }: StepAddCaseProps) => {
   return (
     <div>
       <h1 className="humetrica-title mb-2 animate-slide-up">
-        Agrega un caso de análisis
+        Agrega un miembro del equipo
       </h1>
       
       <p className="humetrica-subtitle mb-8 animate-slide-up" style={{ animationDelay: "0.05s" }}>

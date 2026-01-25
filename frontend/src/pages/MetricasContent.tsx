@@ -1017,10 +1017,24 @@ const MetricasContent = () => {
   );
 };
 
-const Metricas = () => (
-  <ProtectedRoute requiredRole="admin">
-    <MetricasContent />
-  </ProtectedRoute>
-);
+// En desarrollo, renderizar directamente sin ProtectedRoute
+const Metricas = () => {
+  // Modo desarrollo: permitir acceso directo
+  const isDevelopment = 
+    import.meta.env.DEV || 
+    import.meta.env.MODE === 'development' || 
+    typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+  if (isDevelopment) {
+    return <MetricasContent />;
+  }
+
+  // En producción, usar ProtectedRoute
+  return (
+    <ProtectedRoute requiredRole="admin">
+      <MetricasContent />
+    </ProtectedRoute>
+  );
+};
 
 export default Metricas;

@@ -14,22 +14,22 @@ export const StepSelectFocus = ({ onNext }: StepSelectFocusProps) => {
     {
       id: "deadlines",
       icon: Clock,
-      title: "Impacto en cumplimiento de plazos",
+      title: "Comunicación",
     },
     {
       id: "errors",
       icon: AlertTriangle,
-      title: "Impacto en errores críticos",
+      title: "Trabajo en equipo",
     },
     {
       id: "resources",
       icon: BarChart3,
-      title: "Impacto en uso de recursos",
+      title: "Orientación a resultados",
     },
     {
       id: "dynamics",
       icon: Users,
-      title: "Impacto en la dinámica operativa",
+      title: "Liderazgo",
     },
   ];
 

@@ -14,7 +14,23 @@ export interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children, requiredRole, allowedRoles }: ProtectedRouteProps) {
   const { user, role, loading } = useAuth();
+  
+  // Modo desarrollo: SIEMPRE permitir acceso sin autenticación
+  // Esto permite navegar libremente durante el desarrollo
+  const isDevelopment = 
+    import.meta.env.DEV || 
+    import.meta.env.MODE === 'development' || 
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname.includes('localhost');
 
+  // En desarrollo, permitir acceso inmediatamente sin verificar nada
+  // Esto evita cualquier bloqueo por loading o autenticación
+  if (isDevelopment) {
+    return <>{children}</>;
+  }
+
+  // Solo en producción verificar autenticación
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
