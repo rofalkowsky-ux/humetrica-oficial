@@ -47,10 +47,10 @@ export const OnboardingFlow = () => {
 
   const handleCompleteObservation = () => {
     setCurrentStep("complete");
-    // Navegar al Dashboard de métricas después de 2 segundos
+    // Navegar al Dashboard de métricas después de 6 segundos (simulando procesamiento)
     setTimeout(() => {
       navigate("/metricas");
-    }, 2000);
+    }, 6000);
   };
 
   const renderStep = () => {
@@ -82,17 +82,27 @@ export const OnboardingFlow = () => {
       case "complete":
         return (
           <div className="text-center py-12 animate-fade-in">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-              <svg className="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
+            {/* Animated Processing GIF/Spinner */}
+            <div className="w-24 h-24 mx-auto mb-6 relative">
+              <div className="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+              <div className="absolute inset-4 rounded-full bg-primary/10 flex items-center justify-center">
+                <svg className="w-8 h-8 text-primary animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
             </div>
             <h2 className="text-2xl font-semibold text-foreground mb-3">
-              Observación completada
+              Procesando la información
             </h2>
             <p className="text-muted-foreground">
-              Gracias por completar el análisis de {currentCaseData?.name}.
+              Estamos analizando los datos de {currentCaseData?.name || "la observación"}...
             </p>
+            <div className="mt-6 flex justify-center gap-1">
+              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0s" }}></div>
+              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0.4s" }}></div>
+            </div>
           </div>
         );
       
