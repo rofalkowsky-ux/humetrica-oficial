@@ -9,7 +9,7 @@ export const Landing = () => {
   const navigate = useNavigate();
 
   const handleConversemos = () => {
-    navigate("/auth");
+    window.open("https://calendly.com/hola-humetrica/30min", "_blank");
   };
 
   return (
@@ -74,7 +74,7 @@ export const Landing = () => {
                   </div>
                 </div>
                 <div className="animate-fade-up opacity-0 animation-delay-600">
-                  <Button variant="hero" size="xl" onClick={() => navigate("/app")}>
+                <Button variant="hero" size="xl" onClick={handleConversemos}>
                     Agendar una demo
                     <ArrowRight className="w-5 h-5" />
                   </Button>
@@ -267,12 +267,12 @@ export const Landing = () => {
               <span className="text-primary">Se vuelve observable para tomar mejores decisiones.</span>
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Las soft skills no explican a las personas: permiten leer cómo se comportan en un contexto determinado. Ese es el punto de partida para cualquier decisión seria.
+            Deja de adivinar qué pasa en tu equipo. Identificamos los patrones de interacción que impactan en tus resultados.
             </p>
             <div className="flex flex-wrap justify-center gap-3 mb-8">
               {[
-                "Sin predicciones mágicas",
-                "Sin diagnósticos psicológicos",
+                "Detección precisa",
+                "Accionables específicos",
                 "Conducta + Contexto + Datos"
               ].map((tag, index) => (
                 <span
@@ -311,28 +311,28 @@ export const Landing = () => {
         </div>
         </footer>
 
-{/* Cookie Banner */}
-<div className="fixed bottom-6 right-6 max-w-sm p-5 bg-white border border-slate-200 rounded-2xl shadow-2xl z-[100] animate-in fade-in slide-in-from-bottom-8 duration-700">
-  <div className="flex flex-col gap-4">
-    <p className="text-sm text-slate-600 leading-relaxed">
-      Utilizamos cookies para analizar el tráfico y mejorar tu experiencia técnica en **Humétrica**.
-    </p>
-    <div className="flex gap-3">
-      <button 
-        onClick={(e) => e.currentTarget.closest('.fixed')?.remove()}
-        className="flex-1 text-xs bg-slate-900 text-white px-4 py-2.5 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-95"
-      >
-        Aceptar
-      </button>
-      <button 
-        onClick={(e) => e.currentTarget.closest('.fixed')?.remove()}
-        className="flex-1 text-xs bg-slate-100 text-slate-600 px-4 py-2.5 rounded-xl font-bold hover:bg-slate-200 transition-all"
-      >
-        Rechazar
-      </button>
-    </div>
-  </div>
-</div>
-</div>
-);
-};
+{/* Cookie Banner Optimizado para Celulares */}
+<div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:max-w-sm p-5 bg-white border border-slate-200 rounded-2xl shadow-2xl z-[100] animate-in fade-in slide-in-from-bottom-8 duration-700">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Utilizamos cookies para analizar el tráfico y mejorar tu experiencia técnica en **Humétrica**.
+          </p>
+          <div className="flex gap-3">
+            <button 
+              onClick={(e) => e.currentTarget.closest('.fixed')?.remove()}
+              className="flex-1 text-xs bg-slate-900 text-white px-4 py-2.5 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-95"
+            >
+              Aceptar
+            </button>
+            <button 
+              onClick={(e) => e.currentTarget.closest('.fixed')?.remove()}
+              className="flex-1 text-xs bg-slate-100 text-slate-600 px-4 py-2.5 rounded-xl font-bold hover:bg-slate-200 transition-all"
+            >
+              Rechazar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div> // Esta llave cierra el div principal de la Landing
+  );
+}

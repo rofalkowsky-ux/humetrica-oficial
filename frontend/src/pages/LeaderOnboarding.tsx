@@ -2,64 +2,48 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { OnboardingLayout } from "./OnboardingLayout";
 import { StepWelcome } from "./StepWelcome";
-import { StepAddCase } from "./StepAddCase";
+// StepAddCase eliminado para simplificar el flujo inicial
 import { StepSelectFocus } from "./StepSelectFocus";
 import { StepObservation } from "./StepObservation";
 
-type OnboardingStep = "welcome" | "add-case" | "select-focus" | "observation" | "complete";
+type OnboardingStep = "welcome" | "select-focus" | "observation" | "complete";
 
-interface CaseData {
-  name: string;
-  role: string;
-}
-
-export const OnboardingFlow = () => {
+export const LeaderOnboarding = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<OnboardingStep>("welcome");
-  const [currentCaseData, setCurrentCaseData] = useState<CaseData | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedFocus, setSelectedFocus] = useState<string | null>(null);
 
   const getStepNumber = () => {
     switch (currentStep) {
-      case "add-case":
-        return 1;
       case "select-focus":
-        return 2;
+        return 1;
       case "observation":
-        return 3;
+        return 2;
       default:
         return undefined;
     }
   };
 
   const getTotalSteps = () => {
-    if (["add-case", "select-focus", "observation"].includes(currentStep)) {
-      return 3;
+    if (["select-focus", "observation"].includes(currentStep)) {
+      return 2;
     }
     return undefined;
   };
 
-  const handleNewCase = (data: { name: string; role: string }) => {
-    setCurrentCaseData(data);
-    setCurrentStep("select-focus");
-  };
-
   const handleCompleteObservation = () => {
     setCurrentStep("complete");
-    // Navegar al Dashboard de métricas después de 6 segundos (simulando procesamiento)
+    // Redirección al Dashboard interno tras el procesamiento
     setTimeout(() => {
-      navigate("/metricas");
+      navigate("/data-metrics-internal");
     }, 6000);
   };
 
   const renderStep = () => {
     switch (currentStep) {
       case "welcome":
-        return <StepWelcome onNext={() => setCurrentStep("add-case")} />;
-      
-      case "add-case":
-        return <StepAddCase onNext={handleNewCase} />;
+        // Salto directo a la selección de foco
+        return <StepWelcome onNext={() => setCurrentStep("select-focus")} />;
       
       case "select-focus":
         return (
@@ -74,7 +58,7 @@ export const OnboardingFlow = () => {
       case "observation":
         return (
           <StepObservation 
-            caseName={currentCaseData?.name || "esta persona"}
+            caseName="tu equipo"
             onComplete={handleCompleteObservation}
           />
         );
@@ -82,7 +66,6 @@ export const OnboardingFlow = () => {
       case "complete":
         return (
           <div className="text-center py-12 animate-fade-in">
-            {/* Animated Processing GIF/Spinner */}
             <div className="w-24 h-24 mx-auto mb-6 relative">
               <div className="absolute inset-0 rounded-full border-4 border-primary/20"></div>
               <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
@@ -96,7 +79,7 @@ export const OnboardingFlow = () => {
               Procesando la información
             </h2>
             <p className="text-muted-foreground">
-              Estamos analizando los datos de {currentCaseData?.name || "la observación"}...
+              Estamos analizando los datos de tu observación...
             </p>
             <div className="mt-6 flex justify-center gap-1">
               <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0s" }}></div>

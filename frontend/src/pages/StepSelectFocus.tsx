@@ -1,104 +1,40 @@
+import { Zap, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Clock, AlertTriangle, BarChart3, Users } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface StepSelectFocusProps {
   onNext: (focus: string) => void;
 }
 
 export const StepSelectFocus = ({ onNext }: StepSelectFocusProps) => {
-  const [selectedFocus, setSelectedFocus] = useState<string | null>(null);
-
-  const focusOptions = [
-    {
-      id: "deadlines",
-      icon: Clock,
-      title: "Comunicación",
-    },
-    {
-      id: "errors",
-      icon: AlertTriangle,
-      title: "Trabajo en equipo",
-    },
-    {
-      id: "resources",
-      icon: BarChart3,
-      title: "Orientación a resultados",
-    },
-    {
-      id: "dynamics",
-      icon: Users,
-      title: "Liderazgo",
-    },
-  ];
-
-  const handleContinue = () => {
-    if (selectedFocus) {
-      onNext(selectedFocus);
-    }
-  };
-
   return (
-    <div>
-      <h1 className="humetrica-title mb-2 animate-slide-up">
-        ¿Qué impacto querés analizar primero?
-      </h1>
+    <div className="max-w-2xl mx-auto animate-fade-in">
+      <h1 className="humetrica-title mb-2">Para comenzar, analizaremos:</h1>
+      <h2 className="text-3xl font-bold text-primary mb-6">Desalineación Operativa</h2>
       
-      <p className="humetrica-subtitle mb-8 animate-slide-up" style={{ animationDelay: "0.05s" }}>
-        Para simplificar el diagnóstico inicial, vamos a enfocarnos en un impacto principal.
-      </p>
-
-      <div className="space-y-3 mb-6">
-        {focusOptions.map((option, index) => (
-          <button
-            key={option.id}
-            onClick={() => setSelectedFocus(option.id)}
-            className={cn(
-              "w-full flex items-center gap-4 p-4 rounded-lg border transition-all duration-200 text-left animate-slide-up",
-              selectedFocus === option.id
-                ? "border-primary bg-humetrica-highlight"
-                : "border-border bg-card hover:bg-humetrica-card-hover hover:border-primary/30"
-            )}
-            style={{ animationDelay: `${0.1 + index * 0.06}s` }}
-          >
-            <div 
-              className={cn(
-                "w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors",
-                selectedFocus === option.id
-                  ? "bg-primary"
-                  : "bg-secondary"
-              )}
-            >
-              <option.icon 
-                className={cn(
-                  "w-5 h-5 transition-colors",
-                  selectedFocus === option.id
-                    ? "text-primary-foreground"
-                    : "text-secondary-foreground"
-                )}
-              />
-            </div>
-            <span className="font-medium text-foreground">{option.title}</span>
-          </button>
-        ))}
+      <div className="bg-primary/5 border-2 border-primary/20 rounded-2xl p-8 mb-8">
+        <div className="flex items-start gap-4 mb-4">
+          <div className="bg-primary text-white p-2 rounded-lg">
+            <Zap size={24} />
+          </div>
+          <p className="text-lg font-medium leading-relaxed italic">
+            "Es la brecha existente entre lo que el líder cree que su equipo entiende y efectúa, 
+            y lo que el equipo realmente prioriza y hace en la práctica."
+          </p>
+        </div>
+        
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4 pt-4 border-t border-primary/10">
+          <Info size={16} />
+          <span>Luego podrás realizar otros análisis de impacto adicionales.</span>
+        </div>
       </div>
 
-      <p 
-        className="humetrica-note mb-8 animate-slide-up"
-        style={{ animationDelay: "0.35s" }}
-      >
-        Luego podrás explorar otros impactos relacionados.
-      </p>
-
-      <div className="animate-slide-up" style={{ animationDelay: "0.4s" }}>
+      <div className="flex justify-end">
         <Button 
-          onClick={handleContinue}
+          onClick={() => onNext("desalineacion-operativa")}
           size="lg"
-          disabled={!selectedFocus}
-          className="w-full sm:w-auto px-8 h-12 text-base font-medium"
+          className="w-full sm:w-auto px-12 h-12 shadow-lg shadow-primary/20"
         >
-          Continuar
+          Iniciar Diagnóstico
         </Button>
       </div>
     </div>
