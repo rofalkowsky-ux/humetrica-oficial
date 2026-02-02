@@ -2,56 +2,25 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { useNavigate } from "react-router-dom";
 import { HumetricaLogo } from "@/components/HumetricaLogo";
-import { supabase } from "@/lib/supabase"; // Verifica que esta ruta sea correcta
+
+const USER_STORAGE_KEY = "user";
 
 const Auth = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Modo desarrollo: Navegar inmediatamente sin esperar autenticación
-    // Esto permite probar todas las pantallas sin bloqueos
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate("/app"); // Ir al onboarding por defecto
-    }, 300); // Pequeño delay para simular carga
-    
-    // Intentar autenticación en segundo plano (opcional, no bloquea)
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: email || "demo@humetrica.com",
-        password: password || "demo123",
-      });
 
-      if (!error) {
-        // Si la autenticación funciona, ir al dashboard
-        navigate("/metricas");
-      }
-    } catch (err) {
-      // Ignorar errores en modo desarrollo
-      console.log("Modo desarrollo: continuando sin autenticación");
-    }
-  };
+    // Deducir rol a partir del email (simula validación de base de datos)
+    const rol = email.toLowerCase().includes("lider") ? "lider" : "equipo";
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify({ rol }));
 
-  const handleGoogleLogin = () => {
-    console.log("Login con Google");
-  };
-
-  // Modo desarrollo: permitir navegación sin autenticación
-  const handleSkipAuth = () => {
-    navigate("/app"); // Ir al onboarding
-  };
-
-  const handleGoToDashboard = () => {
-    navigate("/metricas"); // Ir directo al dashboard
+    // Redirección con recarga para asegurar la carga del rol
+    window.location.href = "/onboarding";
   };
 
   return (
@@ -76,11 +45,11 @@ const Auth = () => {
           </div>
 
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-medium text-foreground mb-2">
-              Bienvenido
-            </h2>
+            <h1 className="text-2xl font-semibold text-foreground mb-2">
+              Bienvenido a Humétrica
+            </h1>
             <p className="text-muted-foreground text-sm">
-              Ingresa a tu cuenta para continuar
+              Ingresá con tu email y contraseña para continuar
             </p>
           </div>
 
@@ -90,29 +59,24 @@ const Auth = () => {
               <Input
                 id="email"
                 type="email"
-                placeholder="demo@humetrica.com (opcional)"
+                placeholder="tu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
               />
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Contraseña</Label>
-                <button
-                  type="button"
-                  className="text-xs text-muted-foreground"
-                  onClick={() => console.log("Recuperar")}
-                >
-                  ¿Olvidaste tu contraseña?
-                </button>
-              </div>
+              <Label htmlFor="password">Contraseña</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="•••••••• (opcional)"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
               />
             </div>
 
@@ -121,57 +85,9 @@ const Auth = () => {
             </Button>
           </form>
 
-          <div className="relative my-8">
-            <Separator />
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-4 text-xs text-muted-foreground">
-              o
-            </span>
-          </div>
-
-          <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
-            Continuar con Google
-          </Button>
-
-          <p className="text-center mt-8 text-sm text-muted-foreground">
-            ¿No tienes cuenta?{" "}
-            <button
-              type="button"
-              className="text-foreground font-medium hover:underline"
-              onClick={() => console.log("Ir a registro")}
-            >
-              Regístrate
-            </button>
+          <p className="text-center mt-6 text-xs text-muted-foreground">
+            El rol se asigna según el email. Emails que contienen &quot;lider&quot; ingresan como líder; el resto, como equipo.
           </p>
-
-          {/* Modo desarrollo: Navegación rápida */}
-          <div className="mt-6 pt-6 border-t border-border">
-            <p className="text-xs text-muted-foreground text-center mb-3">
-              ⚡ Acceso rápido (modo desarrollo)
-            </p>
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="default"
-                size="sm"
-                className="flex-1 text-xs"
-                onClick={handleSkipAuth}
-              >
-                📋 Onboarding
-              </Button>
-              <Button
-                type="button"
-                variant="default"
-                size="sm"
-                className="flex-1 text-xs"
-                onClick={handleGoToDashboard}
-              >
-                📊 Dashboard
-              </Button>
-            </div>
-            <p className="text-xs text-muted-foreground text-center mt-3">
-              O simplemente presiona "Entrar" arriba
-            </p>
-          </div>
         </div>
       </div>
     </div>

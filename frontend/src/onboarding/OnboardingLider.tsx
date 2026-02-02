@@ -1,20 +1,20 @@
-// OnboardingLider.tsx – Misma UX que TeamMemberOnboarding; al final redirige al Dashboard
+// OnboardingLider.tsx – Flujo: StepWelcome → StepSelectFocus → Encuadre → Dilemas → Completo
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
 import { OnboardingLayout } from '@/pages/OnboardingLayout';
+import { StepWelcome } from '@/pages/StepWelcome';
+import { StepSelectFocus } from '@/pages/StepSelectFocus';
 import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
 import { dilemas } from './dilemas';
 import { codificacion } from './codificacion';
 import { calcularPerfil, guardarRespuestas } from './utils';
 import { trackEvent } from '@/lib/analytics';
 
-type Step = 'intro' | 'dilemas' | 'finalizando' | 'completo';
-
+/** step 0: StepWelcome | 1: StepSelectFocus | 2: Encuadre | 3: Dilemas (test) | 4: finalizando | 5: completo */
 const OnboardingLider: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const [paso, setPaso] = useState<Step>('intro');
+  const [step, setStep] = useState(0);
   const [dilemaActual, setDilemaActual] = useState(0);
   const [respuestas, setRespuestas] = useState<Record<number, string>>({});
   const [tiemposPorDilema, setTiemposPorDilema] = useState<Record<number, number>>({});
@@ -23,13 +23,13 @@ const OnboardingLider: React.FC = () => {
   const [errorGuardado, setErrorGuardado] = useState(false);
 
   useEffect(() => {
-    if (paso === 'dilemas') {
+    if (step === 3) {
       setTiempoInicioDilema(Date.now());
     }
-  }, [dilemaActual, paso]);
+  }, [dilemaActual, step]);
 
   useEffect(() => {
-    if (paso !== 'finalizando') return;
+    if (step !== 4) return;
 
     const run = async () => {
       const respuestasArray = Object.entries(respuestas).map(([dilemaId, opcionId]) => ({
@@ -52,16 +52,11 @@ const OnboardingLider: React.FC = () => {
       } catch {
         setErrorGuardado(true);
       }
-      setPaso('completo');
+      setStep(5);
     };
 
     run();
-  }, [paso]); // eslint-disable-line react-hooks/exhaustive-deps -- solo al entrar en finalizando
-
-  const iniciarEvaluacion = () => {
-    trackEvent('onboarding_iniciado');
-    setPaso('dilemas');
-  };
+  }, [step]); // eslint-disable-line react-hooks/exhaustive-deps -- solo al entrar en step 4
 
   const handleSeleccion = (opcionId: string) => {
     const dilemaId = dilemas[dilemaActual].id;
@@ -83,31 +78,52 @@ const OnboardingLider: React.FC = () => {
     if (dilemaActual < dilemas.length - 1) {
       setDilemaActual(dilemaActual + 1);
     } else {
-      setPaso('finalizando');
+      setStep(4);
     }
   };
 
   const irAlDashboard = () => navigate('/dashboard');
 
+  const iniciarDilemas = () => {
+    trackEvent('onboarding_iniciado');
+    setStep(3);
+  };
+
   const renderStep = () => {
-    if (paso === 'intro') {
+    // Step 0: Bienvenida
+    if (step === 0) {
+      return <StepWelcome onNext={() => setStep(1)} />;
+    }
+
+    // Step 1: Selección de foco (Desalineación Operativa)
+    if (step === 1) {
+      return <StepSelectFocus onNext={() => setStep(2)} />;
+    }
+
+    // Step 2: Encuadre – instrucciones técnicas de los dilemas
+    if (step === 2) {
       return (
         <div className="max-w-2xl mx-auto text-center space-y-8 animate-fade-in">
-          <h2 className="text-4xl font-bold text-slate-900">Evaluación de Criterio Decisional</h2>
-          <p className="text-xl text-slate-500 leading-relaxed">
-            Vas a ver 6 situaciones de liderazgo. Elegí lo que <strong>REALMENTE</strong> harías, no lo que &quot;deberías&quot; hacer. No hay respuestas correctas.
+          <h2 className="text-3xl font-bold text-slate-900">Instrucciones del test</h2>
+          <p className="text-xl text-slate-600 leading-relaxed">
+            Vas a ver <strong>6 situaciones de liderazgo</strong>. Elegí lo que <strong>REALMENTE</strong> harías, no lo que &quot;deberías&quot; hacer. No hay respuestas correctas ni incorrectas.
           </p>
-          <button
-            onClick={iniciarEvaluacion}
-            className="bg-emerald-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-emerald-700 transition-all mt-10"
+          <p className="text-slate-500">
+            Cada escenario tiene varias opciones. Seleccioná la que mejor refleje tu criterio decisional.
+          </p>
+          <Button
+            onClick={iniciarDilemas}
+            size="lg"
+            className="mt-6 px-8 py-4 text-lg font-medium"
           >
-            Comenzar
-          </button>
+            Comenzar test
+          </Button>
         </div>
       );
     }
 
-    if (paso === 'dilemas') {
+    // Step 3: Dilemas (test)
+    if (step === 3) {
       const dilema = dilemas[dilemaActual];
       const progreso = ((dilemaActual + 1) / dilemas.length) * 100;
 
@@ -151,7 +167,8 @@ const OnboardingLider: React.FC = () => {
       );
     }
 
-    if (paso === 'finalizando') {
+    // Step 4: Finalizando
+    if (step === 4) {
       return (
         <div className="text-center py-12 animate-fade-in">
           <div className="w-20 h-20 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
@@ -160,7 +177,8 @@ const OnboardingLider: React.FC = () => {
       );
     }
 
-    if (paso === 'completo') {
+    // Step 5: Completo
+    if (step === 5) {
       return (
         <div className="max-w-4xl mx-auto p-6 animate-fade-in text-center">
           {errorGuardado && (
@@ -196,8 +214,14 @@ const OnboardingLider: React.FC = () => {
     return null;
   };
 
-  const stepNumber = paso === 'intro' ? undefined : paso === 'dilemas' ? dilemaActual + 1 : paso === 'finalizando' ? 7 : 7;
-  const totalSteps = paso === 'intro' ? undefined : 7;
+  const totalSteps = 9;
+  const stepNumber =
+    step === 0 ? 1
+    : step === 1 ? 2
+    : step === 2 ? 3
+    : step === 3 ? 4 + dilemaActual
+    : step === 4 || step === 5 ? 9
+    : 1;
 
   return (
     <OnboardingLayout step={stepNumber} totalSteps={totalSteps}>
