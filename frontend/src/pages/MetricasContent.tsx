@@ -1,24 +1,14 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState } from "react";
 import { MenuLateral } from "@/components/MenuLateral";
 import {
-  cargarDatosRadarSupabase,
-  radarDataComparativo,
-  categoriaConBrecha,
-} from "@/onboarding/utils";
-import {
-  calcularBrechas,
-  calcularIBO,
-  identificarPatron,
-  generarAccionables,
   obtenerColorBrecha,
   obtenerIconoBrecha,
   obtenerEtiquetaBrecha,
 } from "@/onboarding/dashboardUtils";
 import type { Perfil } from "@/onboarding/types";
-import type { Brechas, Patron, Accionable } from "@/onboarding/dashboardTypes";
 import { dimensionesInfo } from "@/onboarding/dashboardTypes";
 import { Download, GitCompare, BarChart3, LayoutDashboard, Layers, TrendingUp, ListChecks } from "lucide-react";
-import { Button } from "@/components/button";
+import { Button } from "@/components/ui/button";
 import {
   RadarChart,
   PolarGrid,
@@ -33,15 +23,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { EquipoPanel } from "@/components/EquipoPanel";
-
-const RADAR_VACIO = [
-  { name: "Prioridad", valor: 50, equipo: 50 },
-  { name: "Validación", valor: 50, equipo: 50 },
-  { name: "Acción", valor: 50, equipo: 50 },
-  { name: "Reglas", valor: 50, equipo: 50 },
-  { name: "Riesgo", valor: 50, equipo: 50 },
-  { name: "Responsabilidad", valor: 50, equipo: 50 },
-];
+import { useMetricas } from "@/hooks/useMetricas";
 
 type VistaDashboard = "resumen" | "dimensiones" | "temporal" | "accionables";
 
@@ -49,47 +31,17 @@ const MetricasContent = () => {
   const [menuCollapsed, setMenuCollapsed] = useState(true);
   const [vistaMetricas, setVistaMetricas] = useState<"equipo" | "global">("global");
   const [vistaDashboard, setVistaDashboard] = useState<VistaDashboard>("resumen");
-  const [perfilLider, setPerfilLider] = useState<Perfil | null>(null);
-  const [perfilEquipo, setPerfilEquipo] = useState<Perfil | null>(null);
-  const [cargando, setCargando] = useState(true);
 
-  useEffect(() => {
-    let mounted = true;
-    cargarDatosRadarSupabase().then(({ perfilLider: l, perfilEquipo: e }) => {
-      if (mounted) {
-        setPerfilLider(l);
-        setPerfilEquipo(e);
-        setCargando(false);
-      }
-    });
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const radarData =
-    perfilLider != null || perfilEquipo != null
-      ? radarDataComparativo(perfilLider, perfilEquipo)
-      : RADAR_VACIO;
-  const tieneEquipo = perfilEquipo != null;
-  const insightCategoria = categoriaConBrecha(perfilLider ?? null, perfilEquipo ?? null);
-
-  const { brechas, IBO, patron, accionables } = useMemo(() => {
-    if (!perfilLider || !perfilEquipo) {
-      const vacio: Brechas = { D1: 0, D2: 0, D3: 0, D4: 0, D5: 0, D6: 0 };
-      return {
-        brechas: vacio,
-        IBO: 0,
-        patron: { tipo: "alineada" as const, nivelRiesgo: "bajo" as const, descripcion: "" },
-        accionables: [] as Accionable[],
-      };
-    }
-    const b = calcularBrechas(perfilLider, perfilEquipo);
-    const ibo = calcularIBO(b);
-    const p = identificarPatron(ibo, null, 0);
-    const a = generarAccionables(b, perfilLider, perfilEquipo);
-    return { brechas: b, IBO: ibo, patron: p, accionables: a };
-  }, [perfilLider, perfilEquipo]);
+  const {
+    perfilLider,
+    perfilEquipo,
+    radarData,
+    tieneEquipo,
+    insightCategoria,
+    brechas,
+    IBO,
+    accionables,
+  } = useMetricas();
 
   const tabsDashboard: { id: VistaDashboard; label: string; icon: React.ReactNode }[] = [
     { id: "resumen", label: "Resumen ejecutivo", icon: <LayoutDashboard size={16} /> },
@@ -282,7 +234,7 @@ const MetricasContent = () => {
                           <XAxis dataKey="n" />
                           <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
                           <Bar dataKey="v" fill="#00A381" radius={[4, 4, 0, 0]} name="IBO (%)" />
-                          <Tooltip formatter={(v: number) => [`${v}%`, "IBO"]} />
+                          <Tooltip />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
