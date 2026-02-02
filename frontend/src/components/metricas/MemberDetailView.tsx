@@ -3,7 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-import type { TeamMember } from "./metricas/EquipoPanel";
+
+interface TeamMember {
+  id: string;
+  nombre: string;
+  iniciales: string;
+  rol: string;
+  score: number;
+  tendencia: "subiendo" | "bajando" | "estable";
+  etiqueta: string;
+  tiempoEnEquipo: string;
+  ultimaSemana: { tipo: "positiva" | "negativa"; cantidad: number };
+  riesgo: "alto" | "medio" | "optimo";
+}
 
 interface MemberDetailViewProps {
   member: TeamMember;
@@ -84,6 +96,7 @@ export const MemberDetailView = ({ member, onBack }: MemberDetailViewProps) => {
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" onClick={onBack} className="gap-2">
@@ -95,15 +108,14 @@ export const MemberDetailView = ({ member, onBack }: MemberDetailViewProps) => {
             <p className="text-sm text-muted-foreground">{member.rol}</p>
           </div>
         </div>
-        <Button className="gap-2 bg-primary">
-          <CheckCircle2 className="h-4 w-4" />
-          Quick Check
-        </Button>
       </div>
 
+      {/* Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="grid grid-cols-12 gap-6">
+          {/* Left Column - Profile Card & Risk Index */}
           <div className="col-span-4 space-y-4">
+            {/* Profile Card */}
             <div className="bg-card border border-border rounded-xl p-5">
               <div className="flex items-start gap-4 mb-4">
                 <Avatar className="h-14 w-14 border-2 border-primary/20">
@@ -152,6 +164,7 @@ export const MemberDetailView = ({ member, onBack }: MemberDetailViewProps) => {
               </div>
             </div>
 
+            {/* Risk Index */}
             <div className="bg-card border border-border rounded-xl p-5">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="font-medium">Índice de Riesgo</h4>
@@ -161,6 +174,7 @@ export const MemberDetailView = ({ member, onBack }: MemberDetailViewProps) => {
               </div>
 
               <div className="flex items-center gap-6">
+                {/* Circular Progress */}
                 <div className="relative w-28 h-28">
                   <svg className="w-28 h-28 transform -rotate-90">
                     <circle
@@ -206,6 +220,7 @@ export const MemberDetailView = ({ member, onBack }: MemberDetailViewProps) => {
             </div>
           </div>
 
+          {/* Center Column - Historical Patterns */}
           <div className="col-span-4 space-y-4">
             <div className="bg-card border border-border rounded-xl p-5 h-full">
               <h4 className="font-medium mb-4">Patrones Históricos</h4>
@@ -266,6 +281,7 @@ export const MemberDetailView = ({ member, onBack }: MemberDetailViewProps) => {
             </div>
           </div>
 
+          {/* Right Column - Weekly Observations */}
           <div className="col-span-4">
             <div className="bg-card border border-border rounded-xl p-5 h-full">
               <h4 className="font-medium mb-4">Observaciones Semanales</h4>
@@ -273,8 +289,10 @@ export const MemberDetailView = ({ member, onBack }: MemberDetailViewProps) => {
               <div className="space-y-6">
                 {weeklyObservations.map((obs, idx) => (
                   <div key={idx} className="relative">
+                    {/* Timeline dot */}
                     <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-amber-400 border-2 border-background" />
                     
+                    {/* Timeline line */}
                     {idx < weeklyObservations.length - 1 && (
                       <div className="absolute -left-0.5 top-4 w-0.5 h-full bg-border" />
                     )}

@@ -3,7 +3,7 @@ import { Users, TrendingDown, TrendingUp, Minus, AlertTriangle, AlertCircle, Che
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MemberDetailView } from "./MemberDetailView";
+import { MemberDetailView } from "../MemberDetailView";
 
 export interface TeamMember {
   id: string;

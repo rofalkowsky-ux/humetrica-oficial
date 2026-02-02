@@ -6,7 +6,7 @@ import OnboardingEquipo from "./onboarding/OnboardingEquipo";
 import Dashboard from "./onboarding/Dashboard";
 import { Gracias } from "./pages/Gracias";
 import Auth from "./pages/Auth";
-import { EquipoPanel } from "./components/EquipoPanel";
+import { EquipoPanel } from "./components/metricas/EquipoPanel";
 
 interface AppProps {}
 
