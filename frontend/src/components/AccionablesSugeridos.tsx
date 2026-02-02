@@ -18,8 +18,8 @@ export const AccionablesSugeridos = ({
       {perfilLider && perfilEquipo ? (
         accionables.length > 0 ? (
           <div className="space-y-6">
-            {accionables.map((acc, i) => (
-              <div key={i} className="border border-border rounded-xl p-6 bg-card shadow-sm">
+            {accionables.map((acc) => (
+              <div key={`${acc.dimensionAfectada}-${acc.prioridad}`} className="border border-border rounded-xl p-6 bg-card shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xs font-bold uppercase text-primary">
                     {acc.dimensionAfectada} · Prioridad {acc.prioridad}
