@@ -214,8 +214,9 @@ export const EquipoPanel = () => {
 
 const TeamMemberCard = ({ member, onClick }: { member: TeamMember; onClick: () => void }) => {
   return (
-    <div 
-      className="bg-card border border-border rounded-xl p-4 hover:shadow-md transition-shadow cursor-pointer hover:border-primary/50"
+    <button 
+      type="button"
+      className="bg-card border border-border rounded-xl p-4 hover:shadow-md transition-shadow cursor-pointer hover:border-primary/50 text-left w-full"
       onClick={onClick}
     >
       <div className="flex items-start justify-between mb-3">
@@ -260,14 +261,15 @@ const TeamMemberCard = ({ member, onClick }: { member: TeamMember; onClick: () =
           {member.ultimaSemana.cantidad} {member.ultimaSemana.tipo === "positiva" ? "positivas" : "negativas"}
         </Badge>
       </div>
-    </div>
+    </button>
   );
 };
 
 const TeamMemberListItem = ({ member, onClick }: { member: TeamMember; onClick: () => void }) => {
   return (
-    <div 
-      className="bg-card border border-border rounded-lg p-4 flex items-center justify-between hover:shadow-md transition-shadow cursor-pointer hover:border-primary/50"
+    <button 
+      type="button"
+      className="bg-card border border-border rounded-lg p-4 flex items-center justify-between hover:shadow-md transition-shadow cursor-pointer hover:border-primary/50 w-full text-left"
       onClick={onClick}
     >
       <div className="flex items-center gap-4">
@@ -305,6 +307,6 @@ const TeamMemberListItem = ({ member, onClick }: { member: TeamMember; onClick: 
           </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 };

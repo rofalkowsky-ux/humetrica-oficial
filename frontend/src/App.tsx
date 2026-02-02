@@ -6,6 +6,7 @@ import OnboardingEquipo from "./onboarding/OnboardingEquipo";
 import Dashboard from "./onboarding/Dashboard";
 import { Gracias } from "./pages/Gracias";
 import Auth from "./pages/Auth";
+import { EquipoPanel } from "./components/EquipoPanel";
 
 interface AppProps {}
 
@@ -40,6 +41,7 @@ const App: React.FC<AppProps> = () => {
             <Route path="/" element={<Auth />} />
             <Route path="/onboarding" element={<OnboardingPorRol />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/equipo" element={<EquipoPanel />} />
             <Route path="/gracias" element={<Gracias />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
