@@ -15,6 +15,7 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend
 } from 'recharts';
 import { EquipoPanel } from '@/components/metricas/EquipoPanel';
+import { HelpTooltip, FloatingTip, useRandomTips, helpTips } from '@/components/metricas/HelpTooltips';
 
 type VistaMetricas = 'global' | 'equipo' | 'comparar';
 type InformeView = 'desalineacion-operativa';
@@ -49,6 +50,7 @@ const Dashboard: React.FC = () => {
   const [reanalisisOpen, setReanalisisOpen] = useState(false);
   const [reanalisisEvento, setReanalisisEvento] = useState('');
   const [reanalisisNotas, setReanalisisNotas] = useState('');
+  const { currentTip, showTip, closeTip } = useRandomTips(true, 45000);
 
   const isAllSelected = selectedInformes.length === informeOptions.length;
 
@@ -183,6 +185,7 @@ const Dashboard: React.FC = () => {
   if (cargando) {
     return (
       <div className="min-h-screen bg-background flex">
+        <FloatingTip show={showTip} onClose={closeTip} tip={currentTip} />
         <MenuLateral collapsed={menuCollapsed} onToggle={() => setMenuCollapsed(!menuCollapsed)} />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -245,10 +248,12 @@ const Dashboard: React.FC = () => {
           {/* Center - Toggle Global/Equipo/Comparar + Selector */}
 <div className="flex items-center gap-2">
   <div className="flex items-center bg-secondary rounded-lg p-0.5">
+  <HelpTooltip content={helpTips.vistaGlobal} side="bottom">
     <Button variant="ghost" size="sm" className={`gap-1.5 h-7 px-3 rounded-md transition-all ${vistaMetricas === 'global' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`} onClick={() => setVistaMetricas('global')}>
       <Users className="h-3.5 w-3.5" />
       Global
     </Button>
+    </HelpTooltip>
     <Button variant="ghost" size="sm" className={`gap-1.5 h-7 px-3 rounded-md transition-all ${vistaMetricas === 'equipo' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`} onClick={() => setVistaMetricas('equipo')}>
       <UsersRound className="h-3.5 w-3.5" />
       Equipo
