@@ -185,7 +185,6 @@ const Dashboard: React.FC = () => {
   if (cargando) {
     return (
       <div className="min-h-screen bg-background flex">
-        <FloatingTip show={showTip} onClose={closeTip} tip={currentTip} />
         <MenuLateral collapsed={menuCollapsed} onToggle={() => setMenuCollapsed(!menuCollapsed)} />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -213,10 +212,12 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-background flex">
       <MenuLateral collapsed={menuCollapsed} onToggle={() => setMenuCollapsed(!menuCollapsed)} />
-      
+      <FloatingTip show={showTip} onClose={closeTip} tip={currentTip} />
       <div className="flex-1 flex flex-col min-w-0">
         <header className="flex items-center justify-between px-6 py-3 border-b border-border bg-card shrink-0">
           <div className="flex items-center gap-2">
+
+          <HelpTooltip content={helpTips.selectorAnalisis}>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="gap-2">
@@ -243,6 +244,7 @@ const Dashboard: React.FC = () => {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
+            </HelpTooltip>
           </div>
 
           {/* Center - Toggle Global/Equipo/Comparar + Selector */}
@@ -254,19 +256,26 @@ const Dashboard: React.FC = () => {
       Global
     </Button>
     </HelpTooltip>
+    
+    <HelpTooltip content={helpTips.vistaEquipo} side="bottom">
     <Button variant="ghost" size="sm" className={`gap-1.5 h-7 px-3 rounded-md transition-all ${vistaMetricas === 'equipo' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`} onClick={() => setVistaMetricas('equipo')}>
       <UsersRound className="h-3.5 w-3.5" />
       Equipo
     </Button>
+    </HelpTooltip>
+
+    <HelpTooltip content={helpTips.vistaComparar} side="bottom">
     <Button variant="ghost" size="sm" className={`gap-1.5 h-7 px-3 rounded-md transition-all ${vistaMetricas === 'comparar' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`} onClick={() => setVistaMetricas('comparar')}>
       <GitCompare className="h-3.5 w-3.5" />
       Comparar
     </Button>
+    </HelpTooltip>
   </div>
   
   {/* Selector de participantes - solo visible en modo Comparar */}
   {vistaMetricas === 'comparar' && (
-    <DropdownMenu>
+    <HelpTooltip content={helpTips.seleccionParticipantes} side="bottom">
+<DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="w-[220px] h-8 justify-between text-sm">
           <div className="flex items-center gap-2">
@@ -293,17 +302,21 @@ const Dashboard: React.FC = () => {
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
+    </HelpTooltip>
+  
   )}
 </div>
 
           <div className="flex items-center gap-2">
             <Popover open={reanalisisOpen} onOpenChange={setReanalisisOpen}>
+            <HelpTooltip content={helpTips.reanalizar}>
               <PopoverTrigger asChild>
                 <Button size="sm" variant="outline" className="gap-2">
                   <RefreshCcw className="h-4 w-4" />
                   Reanalizar
                 </Button>
               </PopoverTrigger>
+              </HelpTooltip>
               <PopoverContent className="w-80 p-0" align="end">
                 <div className="p-4 space-y-4">
                   <div>
@@ -342,10 +355,14 @@ const Dashboard: React.FC = () => {
                 </div>
               </PopoverContent>
             </Popover>
+      
+
+            <HelpTooltip content={helpTips.exportar}>
             <Button size="sm" className="gap-2 bg-primary text-primary-foreground" onClick={handleExportReport}>
               <Download className="h-4 w-4" />
               Exportar
             </Button>
+            </HelpTooltip>
           </div>
         </header>
 
