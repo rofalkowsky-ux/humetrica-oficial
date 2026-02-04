@@ -7,6 +7,7 @@ import Dashboard from "./onboarding/Dashboard";
 import { Gracias } from "./pages/Gracias";
 import Auth from "./pages/Auth";
 import { EquipoPanel } from "./components/metricas/EquipoPanel";
+import Invitaciones from './pages/Invitaciones';
 
 interface AppProps {}
 
@@ -44,6 +45,7 @@ const App: React.FC<AppProps> = () => {
             <Route path="/equipo" element={<EquipoPanel />} />
             <Route path="/gracias" element={<Gracias />} />
             <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/invitaciones" element={<Invitaciones />} />
           </Routes>
         </div>
       </AuthProvider>
