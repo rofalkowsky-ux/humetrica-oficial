@@ -12,8 +12,8 @@ interface MenuLateralProps {
 }
 
 const menuItems = [
-  { icon: BarChart3, label: "Métricas", path: "/metricas" },
-  { icon: UserPlus, label: "Invitaciones", path: "/" },
+  { icon: BarChart3, label: "Métricas", path: "/dashboard" },
+  { icon: UserPlus, label: "Invitaciones", path: "/invitaciones" },
   { icon: LayoutGrid, label: "Módulos", path: "/actividades" },
 ];
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { useTheme } from "./hooks/useTheme";
 import OnboardingLider from "./onboarding/OnboardingLider";
 import OnboardingEquipo from "./onboarding/OnboardingEquipo";
 import Dashboard from "./onboarding/Dashboard";
@@ -8,6 +9,9 @@ import { Gracias } from "./pages/Gracias";
 import Auth from "./pages/Auth";
 import { EquipoPanel } from "./components/metricas/EquipoPanel";
 import Invitaciones from './pages/Invitaciones';
+import Actividades from './pages/Actividades';
+import Perfil from './pages/Perfil';
+import ParticipantePerfil from './pages/ParticipantePerfil';
 
 interface AppProps {}
 
@@ -33,9 +37,16 @@ const OnboardingPorRol: React.FC = () => {
   return <Navigate to="/" replace />;
 };
 
+/** Sincroniza el tema con el DOM desde el primer render para evitar flash al cambiar de ruta. */
+const ThemeSync: React.FC = () => {
+  useTheme();
+  return null;
+};
+
 const App: React.FC<AppProps> = () => {
   return (
     <BrowserRouter>
+      <ThemeSync />
       <AuthProvider>
         <div className="App">
           <Routes>
@@ -44,8 +55,11 @@ const App: React.FC<AppProps> = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/equipo" element={<EquipoPanel />} />
             <Route path="/gracias" element={<Gracias />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/invitaciones" element={<Invitaciones />} />
+            <Route path="/actividades" element={<Actividades />} />
+            <Route path="/perfil" element={<Perfil />} />
+            <Route path="/participante/perfil" element={<ParticipantePerfil />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </AuthProvider>
