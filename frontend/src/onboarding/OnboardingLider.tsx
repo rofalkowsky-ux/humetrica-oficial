@@ -10,6 +10,7 @@ import { dilemas } from './dilemas';
 import { codificacion } from './codificacion';
 import { calcularPerfil, guardarRespuestas } from './utils';
 import { trackEvent } from '@/lib/analytics';
+import { supabase } from '@/lib/supabase';
 
 /** step 0: StepWelcome | 1: StepSelectFocus | 2: Encuadre | 3: Dilemas (test) | 4: finalizando → redirige al dashboard */
 const TIEMPO_ANALISIS_MS = 5000; // 5 segundos mostrando "Analizando respuestas..." para que parezca un análisis real
@@ -60,6 +61,16 @@ const OnboardingLider: React.FC = () => {
       } catch {
         // Guardado en segundo plano; redirigimos igual al dashboard
       }
+      if (cancelled) return;
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase
+          .from('user_roles')
+          .update({ completed_onboarding: true })
+          .eq('user_id', user.id);
+      }
+
       if (cancelled) return;
       navigate('/dashboard', { replace: true });
     };

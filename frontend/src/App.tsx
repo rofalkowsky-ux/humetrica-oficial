@@ -7,6 +7,8 @@ import OnboardingEquipo from "./onboarding/OnboardingEquipo";
 import Dashboard from "./onboarding/Dashboard";
 import { Gracias } from "./pages/Gracias";
 import Auth from "./pages/Auth";
+import { OlvideContrasena } from "./pages/OlvideContrasena";
+import { Registro } from "./pages/Registro";
 import { EquipoPanel } from "./components/metricas/EquipoPanel";
 import Invitaciones from './pages/Invitaciones';
 import Actividades from './pages/Actividades';
@@ -51,6 +53,9 @@ const App: React.FC<AppProps> = () => {
         <div className="App">
           <Routes>
             <Route path="/" element={<Auth />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/registro" element={<Registro />} />
+            <Route path="/olvide-contrasena" element={<OlvideContrasena />} />
             <Route path="/onboarding" element={<OnboardingPorRol />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/equipo" element={<EquipoPanel />} />
